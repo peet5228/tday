@@ -9,8 +9,8 @@ router.get('/',verifyToken,async (req,res) => {
         const [rows] = await db.query(`select * from tb_member where id_member=?`,[id_member])
         res.json(rows[0])
     }catch(err){
-        console.error("Error Register",err)
-        res.status(500).json({message:'Error Registers'})
+        console.error("Error Get Profile",err)
+        res.status(500).json({message:'Error Get Profiles'})
     }
 })
 
