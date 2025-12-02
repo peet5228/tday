@@ -30,7 +30,7 @@
                                 </td>
                             </tr>
                             <tr v-if="result.length === 0">
-                                <td class="text-center border text-gray-500" colspan="7">ไม่พบข้อมูล</td>
+                                <td class="text-center border text-gray-500" colspan="8">ไม่พบข้อมูล</td>
                             </tr>
                         </tbody>
                     </v-table>

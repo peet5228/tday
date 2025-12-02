@@ -37,6 +37,9 @@ app.use('/api/Commit/check_confirm',check_confirm)
 const detail_commit = require('./routes/Commit/detail_commit')
 app.use('/api/Commit/detail_commit',detail_commit)
 
+const signature = require('./routes/Commit/signature')
+app.use('/api/Commit/signature',signature)
+
 //eva
 const me = require('./routes/Eva/me')
 app.use('/api/Eva/me',me)
@@ -80,5 +83,5 @@ app.use('/api/Staff/doc',doc)
 // 404
 app.use((req,res) => res.status(404).json({message:'ปิดปรับปรุง'}))
 
-app.use( (req,res) => res.status(404).json({message:'pppp'}))
+
 app.listen(3001 , () => console.log('Server Running On Port 3001'))
