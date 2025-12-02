@@ -4,23 +4,8 @@
                     <h1 class="text-center text-h5 font-weight-bold text-maroon">จัดการหัวข้อการประเมิน</h1>
                     <v-form @submit.prevent="saveMember">
                         <v-row class="mt-4">
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="form.first_name" :error-messages="error.first_name" label="ชื่อ"></v-text-field>
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="form.last_name" :error-messages="error.last_name" label="นามสกุล"></v-text-field>
-                            </v-col>
                             <v-col cols="12" md="12">
-                                <v-text-field v-model="form.email" :error-messages="error.email" label="อีเมล"></v-text-field>
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="form.username" :error-messages="error.username" label="ชื่อผู้ใช้"></v-text-field>
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="form.password" :error-messages="error.password" type="password" label="รหัสผ่าน"></v-text-field>
-                            </v-col>
-                            <v-col cols="12">
-                                <v-select v-model="form.role" :items="roles" item-title="text" item-value="value" :error-messages="error.role" label="เลือกประเภทสมาขชิก"></v-select>
+                                <v-text-field v-model="form.name_topic" :error-messages="error.name_topic" label="ชื่อหัวข้อการประเมิน"></v-text-field>
                             </v-col>
                             <v-col cols="12" md="6" class="text-center"><v-btn class="text-white w-full" color="blue" type="submit">{{ form.id_topic ? 'อัปเดต' : 'บันทึก' }}</v-btn></v-col>
                             <v-col cols="12" md="6" class="text-center"><v-btn class="text-white w-full" color="error" type="reset">ยกเลิก</v-btn></v-col>
