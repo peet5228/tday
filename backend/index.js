@@ -17,8 +17,12 @@ app.use(('/uploads',express.static(path.join('uploads'))))
 const auth = require('./routes/auth')
 app.use('/api/auth',auth)
 
+const profile = require('./routes/profile')
+app.use('/api/profile',profile)
+
 
 // 404
 app.use((req,res) => res.status(404).json({message:'ปิดปรับปรุง'}))
 
+app.use( (req,res) => res.status(404).json({message:'pppp'}))
 app.listen(3001 , () => console.log('Server Running On Port 3001'))
