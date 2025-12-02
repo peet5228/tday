@@ -32,6 +32,9 @@ app.use('/api/Eva/selfeva',selfeva)
 const member = require('./routes/Staff/member')
 app.use('/api/Staff/member',member)
 
+const topic = require('./routes/Staff/topic')
+app.use('/api/Staff/topic',topic)
+
 
 
 // 404
