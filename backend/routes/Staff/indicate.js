@@ -3,23 +3,10 @@ const db = require('../../db')
 const router = express.Router()
 const {verifyToken,requireRole} = require('../../middleware/authMiddleware')
 
-// ============== DEMO ==============
-// API สำหรับ Get ข้อมูล
-// router.get('/',verifyToken,requireRole('ฝ่ายบุคลากร'),async (req,res) => {
-//     try{
-//         const [rows] = await db.query(``)
-//         res.json(rows)
-//     }catch(err){
-//         console.error('Error Get',err)
-//         res.status(500).json({message:'Error Get'})
-//     }
-// })
-// // ============== DEMO ==============
-
 // API สำหรับ Get ข้อมูล
 router.get('/',verifyToken,requireRole('ฝ่ายบุคลากร'),async (req,res) => {
     try{
-        const [rows] = await db.query(`select * rom tb_indicate,tb_topic where tb_topic.id_topic=tb_indicate.id_topic order by id_indicate desc`)
+        const [rows] = await db.query(`select * from tb_indicate,tb_topic where tb_topic.id_topic=tb_indicate.id_topic order by id_indicate desc`)
         res.json(rows)
     }catch(err){
         console.error('Error Get',err)
@@ -29,7 +16,7 @@ router.get('/',verifyToken,requireRole('ฝ่ายบุคลากร'),asyn
 
 router.get('/all',verifyToken,requireRole('ฝ่ายบุคลากร'),async (req,res) => {
     try{
-        const [rows] = await db.query(`select * rom tb_indicate order by id_indicate desc`)
+        const [rows] = await db.query(`select * from tb_indicate order by id_indicate desc`)
         res.json(rows)
     }catch(err){
         console.error('Error Get',err)
@@ -39,7 +26,9 @@ router.get('/all',verifyToken,requireRole('ฝ่ายบุคลากร'),a
 
 router.get('/:id_indicate',verifyToken,requireRole('ฝ่ายบุคลากร'),async (req,res) => {
     try{
-        const [rows] = await db.query(`select * rom tb_indicate order by id_indicate desc`)
+        const {id_indicate} = req.params
+        const [rows] = await db.query(`select * from tb_indicate where id_indicate='${id_indicate}'`)
+        if(rows.lenggth === 0) return res.status(403).json({message:'ไม่พบข้อมูลจากไอดีนี้'})
         res.json(rows)
     }catch(err){
         console.error('Error Get',err)
@@ -69,6 +58,18 @@ router.put('/:id_indicate',verifyToken,requireRole('ฝ่ายบุคลา�
     }catch(err){
         console.error('Error Update',err)
         res.status(500).json({message:'Error Update'})
+    }
+})
+
+// API สำหรับ Delete ข้อมูล
+router.delete('/:id_indicate',verifyToken,requireRole('ฝ่ายบุคลากร'),async (req,res) => {
+    try{
+        const {id_indicate} = req.params
+        const [rows] = await db.query(`delete from tb_indicate where id_indicate='${id_indicate}'`)
+        res.json({rows,message:'Delete Success'})
+    }catch(err){
+        console.error('Error Delete',err)
+        res.status(500).json({message:'Error Delete'})
     }
 })
 

@@ -11,6 +11,9 @@ import DashboardStaff from '@/views/Staff/dashboardStaff.vue'
 import ManageEva from '@/views/Staff/ManageEva.vue'
 import ManageCommit from '@/views/Staff/ManageCommit.vue'
 import Topic from '@/views/Staff/Topic.vue'
+import Indicate from '@/views/Staff/Indicate.vue'
+import Round_eva from '@/views/Staff/Round_eva.vue'
+import Eva from '@/views/Staff/Eva.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -54,6 +57,21 @@ const router = createRouter({
           path: '/Topic',
           name: 'Topic',
           component: Topic,
+        },
+        {
+          path: '/Indicate',
+          name: 'Indicate',
+          component: Indicate,
+        },
+        {
+          path: '/Round_eva',
+          name: 'Round_eva',
+          component: Round_eva,
+        },
+        {
+          path: '/Eva',
+          name: 'Eva',
+          component: Eva,
         },
       ]
     },
