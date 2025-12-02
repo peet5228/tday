@@ -5,6 +5,8 @@ import UserLayout from '@/components/UserLayout.vue'
 
 //
 import Evaluatee from '@/views/Evaluatee/index.vue'
+import Edit_eva from '@/views/Evaluatee/Edit_eva.vue'
+import Selfeva from '@/views/Evaluatee/Selfeva.vue'
 import DashboardStaff from '@/views/Staff/dashboardStaff.vue'
 import ManageEva from '@/views/Staff/ManageEva.vue'
 import ManageCommit from '@/views/Staff/ManageCommit.vue'
@@ -65,6 +67,16 @@ const router = createRouter({
           path: '/Evaluatee',
           name: 'Evaluatee',
           component: Evaluatee,
+        },
+        {
+          path: '/Edit_eva',
+          name: 'Edit_eva',
+          component: Edit_eva,
+        },
+        {
+          path: '/Selfeva',
+          name: 'Selfeva',
+          component: Selfeva,
         },
       ]
     },

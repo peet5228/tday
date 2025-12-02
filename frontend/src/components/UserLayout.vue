@@ -3,7 +3,7 @@
         <v-app-bar color="#7d0c14" class="py=2">
             <v-app-bar-nav-icon @click="drawer = !drawer" variant="text"></v-app-bar-nav-icon>
             <v-toolbar-title>ระบบประเมินบุคลากรวิทยาลัยเทคนิคน่าน</v-toolbar-title>
-            <div>ผู้ใช้งาน : {{ user.first_name }} {{ user.last_name }}</div>&nbsp;&nbsp;&nbsp;&nbsp;
+            <div>ผู้ใช้งาน : {{ user.first_name }} {{ user.last_name }} <br> {{ user.role }}</div>&nbsp;&nbsp;&nbsp;&nbsp;
             <v-btn class="bg-white" @click="logout">ออกจากระบบ</v-btn>
         </v-app-bar>
         <v-navigation-drawer color="#4A4A4A" v-model="drawer" app :temporary="isMobile" :permanent="isMobile">
@@ -45,6 +45,8 @@ const roles = [
 
     //Evaluatee
     {title:'หน้าหลัก',to:'/Evaluatee',role:'ผู้รับการประเมินผล'},
+    {title:'แก้ไขข้อมูลส่วนตัว',to:'/Edit_eva',role:'ผู้รับการประเมินผล'},
+    {title:'แบบประเมิน',to:'/Selfeva',role:'ผู้รับการประเมินผล'},
 ]
 const navitem = computed(() =>
     roles.filter((item) => item.role.includes(user.value.role))
