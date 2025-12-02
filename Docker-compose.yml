@@ -6,7 +6,7 @@ services:
     container_name: Frontend_Container
     ports: ["5173:5173"]
     restart: always
-    command: npm run dev
+    command: npm run dev -- --host 0.0.0.0
     volumes:
       - ./frontend:/app
       - /app/node_modules
