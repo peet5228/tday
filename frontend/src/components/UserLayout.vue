@@ -43,7 +43,9 @@ const roles = [
     {title:'จัดการแบบประเมิน',to:'/Eva',role:'ฝ่ายบุคลากร'},
 
     //Committee
-    {title:'รายชื่อผู้รับการประเมินผล',to:'/Committee',role:'กรรมกาประเมิน'},
+    {title:'รายชื่อผู้รับการประเมินผล',to:'/Committee',role:'กรรมการประเมิน'},
+    {title:'ดำเนินการประเมิน',to:'/Show_eva',role:'กรรมการประเมิน'},
+    {title:'ตรวจสอบและยืนยันผล',to:'/Check_confirm',role:'กรรมการประเมิน'},
 
     //Evaluatee
     {title:'หน้าหลัก',to:'/Evaluatee',role:'ผู้รับการประเมินผล'},
