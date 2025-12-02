@@ -48,9 +48,7 @@
                         <v-card class="pa-4">
                             <label for="" class="font-weight-bold font-size">ข้อแสนอแนะของกรรมการ</label>
                             <v-row v-for="commit in commits" :key="commit.id_commit">
-                                <v-col cols="12"><p>ประธาน : <span v-if="commit.level_commit ==='ประธาน'">{{ commit.detail_commit }}</span></p></v-col>
-                                <v-col cols="12"><p>กรรมการ : <span v-if="commit.level_commit ==='กรรมการ'">{{ commit.detail_commit }}</span></p></v-col>
-                                <v-col cols="12"><p>เลขา : <span v-if="commit.level_commit ==='เลขา'">{{ commit.detail_commit }}</span></p></v-col>
+                                <v-col cols="12"><p>{{ commit.level_commit }} : {{ commit.detail_commit || 'รอการประเมิน' }}</p></v-col>
                             </v-row>
                         </v-card>
                     </div>
