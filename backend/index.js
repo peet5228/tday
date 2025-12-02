@@ -20,6 +20,10 @@ app.use('/api/auth',auth)
 const profile = require('./routes/profile')
 app.use('/api/profile',profile)
 
+// Staff
+const member = require('./routes/Staff/member')
+app.use('/api/Staff/member',member)
+
 
 // 404
 app.use((req,res) => res.status(404).json({message:'ปิดปรับปรุง'}))
