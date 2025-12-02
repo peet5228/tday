@@ -130,7 +130,7 @@ const del = async (id_eva:number) => {
 }
 
 const add = (id_eva:number) => {
-    router.push({path:`Eva_commt/${id_eva}`})
+    router.push({path:`Eva_commit/${id_eva}`})
 }
 
 onMounted(fetch)

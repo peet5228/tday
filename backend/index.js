@@ -47,6 +47,9 @@ app.use('/api/Staff/round_eva',round_eva)
 const eva = require('./routes/Staff/eva')
 app.use('/api/Staff/eva',eva)
 
+const commit = require('./routes/Staff/commit')
+app.use('/api/Staff/commit',commit)
+
 
 
 // 404

@@ -2,18 +2,20 @@
     <v-container fluid class="py-10">
                 <v-card class="pa-4">
                     <h1 class="text-center text-h5 font-weight-bold text-maroon">ตั้งค่ากรรมการ</h1>
+                    <p class="text-gray-500 font-weight-bold">ข้อมูลผู้ถถูกประเมิน</p>
+                    <p class="text-gray-500 font-weight-bold">ชื่อ : {{ header.first_name }} {{ header.last_name }}</p>
+                    <p class="text-gray-500 font-weight-bold">รอบการประเมิน : รอบที่ {{ header.round_sys }} ปี {{ header.year_sys }}</p>
                     <v-form @submit.prevent="saveMember">
                         <v-row class="mt-4">
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="form.day_eva" type="date" label="วันที่ออกแบบการประเมิน" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-select v-model="form.id_member" :items="member.map( m => ({title:`${m.first_name} ${m.last_name}`,value:m.id_member}))" label="เลือกผู้รับการประเมินผล" />
-                            </v-col>
-                            <v-col cols="12" md="12">
-                                <v-select v-model="form.id_sys" :items="round.map( r => ({title:`รอบที่ ${r.round_sys} ปี ${r.year_sys}`,value:r.id_sys}))" label="เลือกรอบการประเมิน" />
-                            </v-col>
-                            <v-col cols="12" md="6" class="text-center"><v-btn class="text-white w-full" color="blue" type="submit">{{ form.id_eva ? 'อัปเดต' : 'บันทึก' }}</v-btn></v-col>
+                            <template v-for="(c,index) in List" :key="index">
+                                <v-col cols="12" md="6">
+                                    <v-select v-model="c.id_member" :label="`กรรมการคนที่ ${index+1}`" :items="MEMBER(index).map(c => ({title:c.fullname_commit,value:c.id_member}))"></v-select>
+                                </v-col>
+                                <v-col cols="12" md="6">
+                                    <v-select v-model="c.role" :label="`ตำแหน่งที่ ${index+1}`" :items="ROLE(index)"></v-select>
+                                </v-col>
+                            </template>
+                            <v-col cols="12" md="6" class="text-center"><v-btn class="text-white w-full" color="blue" type="submit">บันทึก</v-btn></v-col>
                             <v-col cols="12" md="6" class="text-center"><v-btn class="text-white w-full" color="error" type="reset">ยกเลิก</v-btn></v-col>
                         </v-row>
                     </v-form>
@@ -30,22 +32,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(items,index) in result" :key="items.id_commit">
+                            <tr v-for="(items,index) in List" :key="items.id_commit">
                                 <td class="text-center border">{{ index+1 }}</td>
-                                <td class="text-center border">{{ items.first_name }} {{ items.last_name }}</td>
-                                <td class="text-center border">รอบที่ {{ items.round_sys }} ปี {{ items.year_sys }}</td>
-                                <td class="text-center border">{{ items.day_eva }}</td>
-                                <td class="text-center border">{{ items.status_eva === 1 ? 'ประเมินตนเอง' : items.status_eva === 2 ? 'กรรมการประเมิน' : 'ประเมินเสร็จสิ้น' }}</td>
+                                <td class="text-center border">{{ nameOf(items.id_member) }}</td>
+                                <td class="text-center border">{{ items.role }}</td>
                                 <td class="text-center border">
-                                    <v-btn color="warning" class="text-white" size="small"  @click="edit(items)">แก้ไข</v-btn>&nbsp;
-                                    <v-btn color="error" class="text-white" size="small"  @click="del(items.id_eva)">ลบ</v-btn>
+                                    <!-- <v-btn color="warning" class="text-white" size="small"  @click="edit(items)">แก้ไข</v-btn>&nbsp; -->
+                                    <v-btn color="error" class="text-white" size="small"  @click="del(items.id_commit)">ลบ</v-btn>
                                 </td>
-                                <td class="text-center border">
-                                    <v-btn color="success" class="text-white" size="small"  @click="add(items.id_eva)">เพิ่มกรรมการ</v-btn>
-                                </td>
-                            </tr>
-                            <tr v-if="result.length === 0">
-                                <td class="text-center border text-gray-500" colspan="7">ไม่พบข้อมูล</td>
                             </tr>
                         </tbody>
                     </v-table>
@@ -55,65 +49,81 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { ref,onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref,onMounted,computed } from 'vue';
+import { useRoute } from 'vue-router';
 
-const router = useRouter()
+const id_eva = useRoute().params.id_eva
 const api = import.meta.env?.VITE_BASE_API || 'http://localhost:3001/api/Staff'
 const token = localStorage.getItem('token')
 
-const result = ref([])
-const member = ref([])
-const round = ref([])
+const header = ref([])
+const role = ['ประธาน','กรรมการ','เลขา']
+const people = ref([])
+const List = ref([
+    {id_commit:null,id_member:'',role:''},
+    {id_commit:null,id_member:'',role:''},
+    {id_commit:null,id_member:'',role:''},
+])
 
 const fetch = async () => {
     try{
-       const m = await axios.get(`${api}/member/eva`,{headers:{Authorization: `Bearer ${token}`}})
-       member.value = m.data 
-       const r = await axios.get(`${api}/eva/round`,{headers:{Authorization: `Bearer ${token}`}})
-       round.value = r.data 
-       const res = await axios.get(`${api}/eva`,{headers:{Authorization: `Bearer ${token}`}})
-       result.value = res.data 
-       console.log("Round : ",r.data)
+        const h = await axios.get(`${api}/commit/header/${id_eva}`,{headers:{Authorization: `Bearer ${token}`}})
+        header.value = h.data[0]
+        const res = await axios.get(`${api}/commit/${id_eva}`,{headers:{Authorization: `Bearer ${token}`}})
+        people.value = res.data.before 
+        const useData = res.data.after
+        if(useData.length === 0){
+            List.value = [
+                {id_commit:null,id_member:'',role:''},
+                {id_commit:null,id_member:'',role:''},
+                {id_commit:null,id_member:'',role:''},
+            ]
+        }else{
+            List.value = useData.map(c => ({
+                id_commit:c.id_commit,id_member:c.id_member,role:c.role
+            }))
+            while(List.value.length < 3){
+                List.value.push({id_commit:null,id_member:'',role:''})
+            }
+        }
     }catch(err){
         console.error('Error Fetching',err)
     }
 }
 
+const nameMap = computed( () => Object.fromEntries(people.value.map(p => [p.id_member,p.fullname_commit])) )
+const nameOf = (id:number) => nameMap.value[id]
+
+const MEMBER = (idx:number) => {
+    const picked = List.value.map( (c,i) => (i !== idx ? c.id_member : null) )
+    return people.value.filter( (p) => !picked.includes(p.id_member))
+}
+
+const ROLE = (idx:number) => {
+    const picked = List.value.map( (c,i) => (i !== idx ? c.role : null) )
+    return role.filter( (p) => !picked.includes(p))
+}
+
+
 const saveMember = async () =>{
     try{
-        if(form.value.id_eva){
-            await axios.put(`${api}/eva/${form.value.id_eva}`,form.value,{headers:{Authorization: `Bearer ${token}`}})
-        }else{
-            await axios.post(`${api}/eva`,form.value,{headers:{Authorization: `Bearer ${token}`}})
-        }
+        await axios.post(`${api}/commit/${id_eva}`,List.value,{headers:{Authorization: `Bearer ${token}`}})
         alert('ทำรายการสำเร็จ')
         await fetch()
-        await reset()
     }catch(err){
         console.error('ทำรายการไม่สำเร็จ',err)
     }
 }
 
-const edit = (items:any) => {
-    form.value = {...items}
-}
-
-const del = async (id_eva:number) => {
+const del = async (id_commit:number) => {
     try{
         if(!confirm('ต้องการลบใช่หรือไม่')) return
-        await axios.delete(`${api}/eva/${id_eva}`,{headers:{Authorization: `Bearer ${token}`}})
+        await axios.delete(`${api}/commit/${id_commit}`,{headers:{Authorization: `Bearer ${token}`}})
         await fetch()
-        await reset()
     }catch(err){
         console.error('Error Delete',err)
     }
 }
-
-const add = (id_eva:number) => {
-    router.push({path:`Eva_commt/${id_eva}`})
-}
-
 onMounted(fetch)
 </script>
 
