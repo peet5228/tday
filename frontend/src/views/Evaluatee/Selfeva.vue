@@ -2,7 +2,7 @@
     <v-container>
         <v-row>
             <v-col cols="12">
-                <v-form>
+                <v-form v-if="user.status_eva === 1" @submit.prevent="saveScore">
                     <h1 class="font-weight-bold text-h5">แบบประเมินตนเอง</h1>
                     <v-card class="mt-2 pa-2">
                         <p>ชื่อ : {{ user.first_name }} {{ user.last_name }}</p>
@@ -26,7 +26,12 @@
                             </v-card>
                         </v-col>
                     </v-row>
+                    <div class="text-center mt-4">
+                        <v-btn type="submit" color="blue">บันทึกคะแนน</v-btn><br><br>
+                    </div>
                 </v-form>
+                <v-alert v-else-if="user.status_eva === 2 || user.status_eva === 3" type="success">คุณกรอกแบบประเมินแล้ว</v-alert>
+                <v-alert v-else type="warning">คุณยังไม่มีแบบประเมิน</v-alert>
             </v-col>
         </v-row>
     </v-container>
@@ -57,6 +62,41 @@ const fetchTopic = async () =>{
 onMounted(async () =>{
     await Promise.all([fetchTopic(),fetchUser()])
 })
+const fileMap = ref<Record<string,string>>({})
+const onFilechange = (event:Event,id_topic:number,id_indicate:number) =>{
+    const file = (event.target as HTMLInputElement)?.files?.[0]
+    if(!file)return
+    fileMap.value[`${id_topic}-${id_indicate}`] = file
+}
+const saveScore = async () =>{
+    const formData = new FormData()
+    const allScore = topics.value.flatMap(topic =>
+        topic.indicates.map((i:any) =>{
+            const key = `${topic.id_topic}-${i.id_indicate}`
+            const file = fileMap.value[key]
+            if(file) formData.append(`file_${key}`,file)
+            return{
+                id_topic:topic.id_topic,
+                id_indicate:i.id_indicate,
+                score:i.score,
+                detail_eva:i.detail_eva || null,
+                file_key:file ? `file_${key}` : null
+            }
+        })
+    )
+    if(allScore.some((s) => !s.score)){
+        alert('กรุณากรอกคะแนนให้ครบ')
+        return
+    }
+    formData.append('scores',JSON.stringify(allScore))
+    try{
+        await axios.post(`http://localhost:3001/api/Eva/selfeva`,formData,{headers:{Authorization:`Bearer ${token}`}})
+        alert('บันทึกคะแนนสำเร็จ')
+        await Promise.all([fetchTopic(),fetchUser()])
+    }catch(err){
+        console.error('บันทึกคะแนนไม่สำเร็จ',err)
+    }
+}
 </script>
 
 <style scoped>
