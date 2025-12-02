@@ -8,7 +8,7 @@
                                 <v-text-field v-model="name_doc" label="ชื่อเอกสาร"></v-text-field>
                             </v-col>
                             <v-col cols="12" md="12">
-                                <v-file-input v-model="file" label="ไฟล์"  accept=".doc,.docx,.png,.pdf,,.txt,.image/*"/>
+                                <v-file-input v-model="file" label="ไฟล์"  accept=".doc,.docx,.png,.pdf,.txt,image/*"/>
                             </v-col>
                             <v-col cols="12" md="6" class="text-center"><v-btn class="text-white w-full" color="blue" type="submit">บันทึก</v-btn></v-col>
                             <v-col cols="12" md="6" class="text-center"><v-btn class="text-white w-full" color="error" type="reset">ยกเลิก</v-btn></v-col>

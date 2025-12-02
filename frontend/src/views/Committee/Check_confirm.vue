@@ -9,9 +9,10 @@
                                 <th class="text-center border w-1/10">ชื่อ</th>
                                 <th class="text-center border w-1/10">นามสกุล</th>
                                 <th class="text-center border w-1/10">วันที่ออกแบบการประเมิน</th>
+                                <th class="text-center border w-1/10">รอบการประเมิน</th>
                                 <th class="text-center border w-1/10">คะแนนประเมิน</th>
-                                <th class="text-center border w-1/10">สถานะการประเมิน</th>
-                                <th class="text-center border w-1/10">ตรวจการประเมิน</th>
+                                <th class="text-center border w-1/10">ตรวจสอบคะแนน</th>
+                                <th class="text-center border w-1/10">ยืนยันผลประเมิน</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -20,10 +21,12 @@
                                 <td class="text-center border">{{ items.first_name }}</td>
                                 <td class="text-center border">{{ items.last_name }}</td>
                                 <td class="text-center border">{{ items.day_eva }}</td>
+                                <td class="text-center border">รอบที่ {{ items.round_sys }}</td>
                                 <td class="text-center border">{{ items.total_eva }}</td>
-                                <td class="text-center border">{{ items.status_eva === 1 ? 'ประเมินตนเอง' : items.status_commit === 'y' ? 'ประเมินสำเร็จ' : items.status_eva === 2 ? 'รอกรรมการประเมิน' : 'ประเมินเสร็จสิ้น' }}</td>
+                                <td class="text-center border"><v-btn color="blue" class="text-white" size="small" @click="check(items.id_eva)">ตรวจสอบ</v-btn></td>
                                 <td class="text-center border">
-                                    <v-btn color="blue" class="text-white" size="small"  @click="add(items.id_eva)">ตรวจสอบ</v-btn>
+                                    <v-btn v-if="items.signature" color="success" class="text-white" size="small">ยืนยันผลแล้ว</v-btn>
+                                    <v-btn v-else color="blue" class="text-white" size="small" @click="add(items.id_eva)">ยืนยันผล</v-btn>
                                 </td>
                             </tr>
                             <tr v-if="result.length === 0">
@@ -48,7 +51,7 @@ const result = ref([])
 
 const fetch = async () => {
     try{
-       const res = await axios.get(`${api}/show_eva`,{headers:{Authorization: `Bearer ${token}`}})
+       const res = await axios.get(`${api}/check_confirm`,{headers:{Authorization: `Bearer ${token}`}})
        result.value = res.data 
     }catch(err){
         console.error('Error Fetching',err)
@@ -56,7 +59,11 @@ const fetch = async () => {
 }
 
 const add = (id_eva:number) => {
-    router.push({path:`/Detail_eva/${id_eva}`})
+    router.push({path:`/Signature/${id_eva}`})
+}
+
+const check = (id_eva:number) => {
+    router.push({path:`/Detail_commit/${id_eva}`})
 }
 
 onMounted(fetch)
