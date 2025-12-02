@@ -26,6 +26,11 @@ import Score_commitList from '@/views/Staff/Score_commitList.vue'
 import Status2 from '@/views/Staff/Status2.vue'
 import StatusCommit from '@/views/Staff/StatusCommit.vue'
 import Document from '@/views/Staff/Document.vue'
+import Report from '@/views/Staff/Report.vue'
+import Report_eva from '@/views/Staff/Report_eva.vue'
+import Report_commit from '@/views/Staff/Report_commit.vue'
+import Report_Y from '@/views/Staff/Report_Y.vue'
+import Report_N from '@/views/Staff/Report_N.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -118,6 +123,31 @@ const router = createRouter({
           path: '/Document',
           name: 'Document',
           component: Document,
+        },
+        {
+          path: '/Report',
+          name: 'Report',
+          component: Report,
+        },
+        {
+          path: '/Report_eva',
+          name: 'Report_eva',
+          component: Report_eva,
+        },
+        {
+          path: '/Report_commit',
+          name: 'Report_commit',
+          component: Report_commit,
+        },
+        {
+          path: '/Report_Y',
+          name: 'Report_Y',
+          component: Report_Y,
+        },
+        {
+          path: '/Report_N',
+          name: 'Report_N',
+          component: Report_N,
         },
       ]
     },

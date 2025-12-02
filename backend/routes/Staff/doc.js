@@ -36,7 +36,7 @@ router.post('/',verifyToken,requireRole('ฝ่ายบุคลากร'),asy
         const file = req.files?.file
         const filename = Date.now() + path.extname(file.name).toLowerCase()
         await file.mv(path.join(uploadDir,filename))
-        await db.query(`insert tb_doc (name_doc,day_doc,file) values (?,CURDATE(),?)`,[name_doc,filename])
+        await db.query(`insert into tb_doc (name_doc,day_doc,file) values (?,CURDATE(),?)`,[name_doc,filename])
         res.status(201).json({message:'Upload Success'})
     }catch(err){
         console.error('Error Get',err)

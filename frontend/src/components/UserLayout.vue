@@ -1,12 +1,12 @@
 <template>
     <v-app>
-        <v-app-bar color="#7d0c14" class="py=2">
-            <v-app-bar-nav-icon @click="drawer = !drawer" variant="text"></v-app-bar-nav-icon>
-            <v-toolbar-title>ระบบประเมินบุคลากรวิทยาลัยเทคนิคน่าน</v-toolbar-title>
-            <div>ผู้ใช้งาน : {{ user.first_name }} {{ user.last_name }} <br> {{ user.role }}</div>&nbsp;&nbsp;&nbsp;&nbsp;
-            <v-btn class="bg-white" @click="logout">ออกจากระบบ</v-btn>
+        <v-app-bar color="#7d0c14" class="py-2 no-print">
+            <v-app-bar-nav-icon @click="drawer = !drawer" variant="text" class="no-print"></v-app-bar-nav-icon>
+            <v-toolbar-title class="no-print">ระบบประเมินบุคลากรวิทยาลัยเทคนิคน่าน</v-toolbar-title>
+            <div class="no-print">ผู้ใช้งาน : {{ user.first_name }} {{ user.last_name }} <br> {{ user.role }}</div>&nbsp;&nbsp;&nbsp;&nbsp;
+            <v-btn class="bg-white no-print" @click="logout">ออกจากระบบ</v-btn>
         </v-app-bar>
-        <v-navigation-drawer color="#4A4A4A" v-model="drawer" app :temporary="isMobile" :permanent="isMobile">
+        <v-navigation-drawer color="#4A4A4A" v-model="drawer" app :temporary="isMobile" :permanent="isMobile" class="no-print">
             <v-list>
                 <v-list-item v-for="item in navitem" :key="item.title" :to="item.to">
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -47,6 +47,7 @@ const roles = [
     {title:'สถานะการประเมินของผู้รับการประเมิน',to:'/StatusEva',role:'ฝ่ายบุคลากร'},
     {title:'สถานะการประเมินของกรรมการประเมิน',to:'/StatusCommit',role:'ฝ่ายบุคลากร'},
     {title:'แนบเอกสารการประเมินหรือคู่มือการประเมิน',to:'/Document',role:'ฝ่ายบุคลากร'},
+    {title:'รายงาน',to:'/Report',role:'ฝ่ายบุคลากร'},
 
     //Committee
     {title:'รายชื่อผู้รับการประเมินผล',to:'/Committee',role:'กรรมกาประเมิน'},
@@ -77,5 +78,11 @@ onMounted(fetchUser)
 </script>
 
 <style scoped>
+@media print {
+    /* ซ่อนทุกอย่างที่มี class no-print */
+    .no-print {
+        display: none !important;
+    }
+}
 
 </style>

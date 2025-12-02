@@ -20,6 +20,9 @@ app.use('/api/auth',auth)
 const profile = require('./routes/profile')
 app.use('/api/profile',profile)
 
+const dashboard = require('./routes/dashboard')
+app.use('/api/dashboard',dashboard)
+
 
 //eva
 const me = require('./routes/Eva/me')
@@ -55,6 +58,9 @@ app.use('/api/Staff/status',status)
 
 const doc = require('./routes/Staff/doc')
 app.use('/api/Staff/doc',doc)
+
+const report = require('./routes/Staff/report')
+app.use('/api/Staff/report',report)
 
 
 
